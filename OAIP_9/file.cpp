@@ -42,6 +42,7 @@ void load_DB(const string& filename, Stack*& top) {
 		return;
 	}
 	clear(top);
+	Stack* tempStack = nullptr;
 	while (true) {
 		Stack* newNode = (Stack*)malloc(sizeof(Stack));
 		if (!newNode) {
@@ -53,9 +54,15 @@ void load_DB(const string& filename, Stack*& top) {
 			free(newNode);
 			break;
 		}
-		newNode->next = top;
-		top = newNode;
+		newNode->next = tempStack;
+		tempStack = newNode;
 	}
 	file.close();
+	while (tempStack != nullptr) {
+		Stack* temp = tempStack;
+		tempStack = tempStack->next;
+		temp->next = top;
+		top = temp;
+	}
 	success_read(filename);
 }

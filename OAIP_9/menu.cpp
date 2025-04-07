@@ -5,7 +5,7 @@
 using namespace std;
 
 void showMenu(Stack*& top) {	
-	int m = 0;
+	int m = 0, choice = 0;
 	string str, filename;	
 	do
 	{		
@@ -44,11 +44,29 @@ void showMenu(Stack*& top) {
 				cin.ignore();
 				load_DB(filename, top);
 			} break;
-			case 8:
+			case 8: {
+				int pos;
+				input_toDelete(str, pos);
+				deletePatient(top, pos);				
+			} break;
+			case 9: {
+				input_choice(str, choice);
+				if (choice == 1) {
+					shellSort_medCard(top, true);
+				}
+				else {
+					shellSort_medCard(top, false);
+				}
+			} break;
+			case 10: {				
+				input_choice(str, choice);
+				sort_diagnosis(top,choice);				
+			} break;
+			case 11:
 				break;
 			}
 		}
 		else error_choice();
-	} while (!checkMenu(str) || m != 8);
+	} while (!checkMenu(str) || m != 11);
 	clear(top);	
 }

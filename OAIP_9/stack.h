@@ -18,7 +18,9 @@ struct Stack {
 };
 
 void addPatient(Stack*& top);
+Patient pop(Stack*& top);
+void push(Stack*& top, const Patient& patient);
+void deletePatient(Stack*& top, int pos);
 void clear(Stack*& top);
-void add_memory(Stack*& top);
 
 #endif

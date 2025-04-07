@@ -12,5 +12,7 @@ bool isValidDate(int day, int month, int year);
 void input_patient(Stack*& newNode);
 void input_filename(string& filename, int m);
 void input_str(string& str);
+void input_toDelete(string& str, int& pos);
+void input_choice(string& str, int& choice);
 
 #endif

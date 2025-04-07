@@ -15,7 +15,7 @@ bool checkMenu(string str)
 		return false;
 	for (int i = 0; i < str.size(); i++)
 	{
-		if (str[i] < '1' || str[i]>'9')
+		if (str[i] < '0' || str[i]>'9')
 		{
 			return false;
 		}
@@ -51,7 +51,7 @@ bool isValidDate(int day, int month, int year) {
 }
 
 void input_patient(Stack*& newNode) {	
-	add_memory(newNode);
+	newNode = (Stack*)malloc(sizeof(Stack));
 	string str;
 	bool end;
 	int count;
@@ -254,4 +254,28 @@ void input_filename(string& filename, int m) {
 void input_str(string& str) {
 	output_menu(0);
 	cin >> str;
+}
+
+void input_toDelete(string& str, int& pos) {	
+	do {
+		pos = 0;
+		cout << endl << "Введите номер записи пациента: ";
+		cin >> str;
+		if (check(str)) {
+			pos = stoi(str);
+		}
+		else cerr << endl << "Некорректный ввод.";
+	} while (!check(str) || pos < 1);
+}
+
+void input_choice(string& str, int& choice) {	
+	do {
+		choice = 0;
+		cout << endl << "Выберите вариант сортировки (по убыв. - 1, по возр. - 2): ";
+		cin >> str;
+		if (check(str)) {
+			choice = stoi(str);
+		}
+		else cerr << endl << "Некорректный ввод.";
+	} while (!check(str) || choice < 1 || choice > 2);
 }
