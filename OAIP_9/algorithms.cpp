@@ -47,9 +47,7 @@ void shellSort_medCard(Stack*& top, bool ubivanie) {
                     gap_node = gap_node->next;
                 }
                 if (!gap_node) break;            
-                if (compareNumber(gap_node->data.medicalCardNumber,
-                    key.medicalCardNumber,
-                    ubivanie)) {              
+                if (compareNumber(gap_node->data.medicalCardNumber, key.medicalCardNumber, ubivanie)) {              
                     Stack* target = reversed;
                     for (int k = 0; k < j && target; k++) {
                         target = target->next;
