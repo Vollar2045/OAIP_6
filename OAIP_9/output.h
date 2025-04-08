@@ -6,7 +6,8 @@
 #include "stack.h"
 using namespace std;
 
-void printPatient(Stack* top);
+void printHead();
+void printPatient(Patient& p);
 void printTab(Stack* top);
 void output_menu(int m);
 void error_create();

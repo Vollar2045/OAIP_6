@@ -205,7 +205,7 @@ void shellSort_medCard1(Stack*& top, bool ubivanie) {
 
 void searchPatients(Stack*& top) {
     if (top == nullptr) {
-        cerr << endl <<"Стек пуст." << endl;
+        cerr << endl << "Стек пуст." << endl;
         return;
     }
     int fieldChoice;
@@ -220,7 +220,7 @@ void searchPatients(Stack*& top) {
         searchStr = input_birthdate(top, 0);
     } break;
     case 3: {
-        input_searchInt(searchInt);
+        searchInt = input_medcardNumber(top, 0);
     } break;
     case 4: {
         searchStr = input_diagnosis(top, 0);
@@ -228,73 +228,79 @@ void searchPatients(Stack*& top) {
     case 5: {
         searchStr = input_lastVisitDate(top, 0);
     } break;
-    }      
-    int direction;    
-    input_direction(direction);      
-    Stack* buffer = nullptr;       
-    Stack* reverseBuffer = nullptr;
-    while (top) {
-        Patient p = pop(top);
-        push(buffer, p);
     }
+    int direction;
+    input_direction(direction);
+    Stack* buffer = nullptr;
+    Stack* reverseBuffer = nullptr;
+    printHead();
     if (direction == 1) {
-        // Сверху вниз — ищем сразу в buffer
-        Stack* temp = buffer;
-        while (temp) {
+        while (top) {
+            Patient p = pop(top);
             bool match = false;
             switch (fieldChoice) {
             case 1: {
-                match = string(temp->data.name) == searchStr;
+                match = string(p.name).find(searchStr) != string::npos;
                 break;
             }
             case 2: {
-                match = string(temp->data.birthDate) == searchStr;
+                match = string(p.birthDate).find(searchStr) != string::npos;
                 break;
             }
             case 3: {
-                match = temp->data.medicalCardNumber == searchInt;
+                match = p.medicalCardNumber == searchInt;
                 break;
             }
             case 4: {
-                match = string(temp->data.diagnosis) == searchStr;
+                match = string(p.diagnosis).find(searchStr) != string::npos;
                 break;
             }
             case 5: {
-                match = string(temp->data.lastVisitDate) == searchStr;
+                match = string(p.lastVisitDate).find(searchStr) != string::npos;
                 break;
             }
             }
-            if (match) 
-                printPatient(temp);
-            temp = temp->next;
+            if (match)
+                printPatient(p);
+            push(buffer, p);
+        }
+        while (buffer) {
+            push(top, pop(buffer));
         }
     }
-    else {
-        // Снизу вверх — перекладываем buffer в reverseBuffer и ищем там
-        while (buffer) {
-            Patient p = pop(buffer);
-            push(reverseBuffer, p);
+    else {     
+        while (top) {
+            push(buffer, pop(top));
         }
-        Stack* temp = reverseBuffer;
-        while (temp) {
+        while (buffer) {
+            Patient p = pop(buffer);       
             bool match = false;
             switch (fieldChoice) {
-            case 1: match = string(temp->data.name) == searchStr; break;
-            case 2: match = string(temp->data.birthDate) == searchStr; break;
-            case 3: match = temp->data.medicalCardNumber == searchInt; break;
-            case 4: match = string(temp->data.diagnosis) == searchStr; break;
-            case 5: match = string(temp->data.lastVisitDate) == searchStr; break;
+            case 1: {
+                match = string(p.name).find(searchStr) != string::npos;
+                break;
             }
-            if (match) printPatient(temp->data);
-            temp = temp->next;
+            case 2: {
+                match = string(p.birthDate).find(searchStr) != string::npos;
+                break;
+            }
+            case 3: {
+                match = p.medicalCardNumber == searchInt;
+                break;
+            }
+            case 4: {
+                match = string(p.diagnosis).find(searchStr) != string::npos;
+                break;
+            }
+            case 5: {
+                match = string(p.lastVisitDate).find(searchStr) != string::npos;
+                break;
+            }
+            }
+            if (match) {
+                printPatient(p);
+            }
+            push(top, p);
         }
-    }
-
-    // Восстанавливаем стек
-    while (reverseBuffer) {
-        push(originalTop, pop(reverseBuffer));
-    }
-    while (buffer) {
-        push(originalTop, pop(buffer));
-    }
+    }    
 }

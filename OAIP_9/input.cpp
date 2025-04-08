@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <clocale> 
 using namespace std;
 
 bool checkMenu(string str)
@@ -50,24 +51,46 @@ bool isValidDate(int day, int month, int year) {
 	return day <= days[month - 1];
 }
 
+char toupper(char с) {
+	if (с >= 'а' && с <= 'я') 
+		return с - ('а' - 'А');
+	if (с == 'ё') 
+		return 'Ё';
+	return с;
+}
+
+char tolower(char с) {
+	if (с >= 'А' && с <= 'Я')
+		return с + ('а' - 'А');
+	if (с == 'Ё')
+		return 'ё';
+	return с;
+}
+
+bool is_alpha(char с) {
+	return (с >= 'А' && с <= 'Я') ||
+		(с >= 'а' && с <= 'я') ||
+		с == 'Ё' || с == 'ё';
+}
+
 void input_patient(Stack*& newNode) {	
-	newNode = (Stack*)malloc(sizeof(Stack));
-	string str;
+	newNode = (Stack*)malloc(sizeof(Stack));	
+	string str;	
 	bool end;
 	int count;
 	int day, month, year, dayVisit, monthVisit, yearVisit;;
-	do {
+	do {		
 		end = false;
 		count = 0;
 		cout << endl << "Введите Ф.И.О.: ";
 		rewind(stdin);
 		getline(cin, str);
-		if (str.size() >= 30) {
+		if (str.size() >= 40) {
 			cerr << endl << "Слишком длинная строка. Попробуйте снова.";
 			continue;
 		}
 		for (int i = 0; i < str.size(); i++) {
-			if ((str[i] < 'а' || str[i] > 'я') && (str[i] < 'А' || str[i] > 'Я') && (str[i] != 'ё' && str[i] != 'Ё')) {
+			if (!(is_alpha(str[i]))) {
 				if ((str[i] != '.') && (str[i] != ' ')) {
 					cerr << endl << "Неверный ввод. Попробуйте снова.";
 					break;
@@ -79,13 +102,29 @@ void input_patient(Stack*& newNode) {
 					}
 					count++;
 				}
+				if (str[i] == ' ') {
+					if (str[i + 1] == ' ') {
+						cerr << endl << "Неверный ввод. Попробуйте снова.";
+						break;
+					}
+				}
 			}
 			if (count > 2) {
 				cerr << endl << "Неверный ввод. Попробуйте снова.";
 				break;
 			}
-			if (str.size() - 1 == i)
-				end = true;
+			if (str.size() - 1 == i) {
+				end = true;		
+				str[0] = toupper(str[0]);
+				if (count != 0) {
+					str[str.find('.') - 1] = toupper(str[str.find('.') - 1]);
+					str[str.rfind('.') - 1] = toupper(str[str.rfind('.') - 1]);
+				}
+				else {
+					str[str.find(' ') + 1] = toupper(str[str.find(' ') + 1]);
+					str[str.find(' ', str.find(' ') + 1) + 1] = toupper(str[str.find(' ', str.find(' ') + 1) + 1]);
+				}
+			}
 		}
 	} while (!end);
 	strcpy(newNode->data.name, str.c_str());
@@ -146,12 +185,12 @@ void input_patient(Stack*& newNode) {
 		cout << endl << "Введите диагноз: ";
 		rewind(stdin);
 		getline(cin, str);
-		if (str.size() >= 30) {
+		if (str.size() >= 20) {
 			cerr << endl << "Слишком длинная строка. Попробуйте снова.";
 			continue;
 		}
 		for (int i = 0; i < str.size(); i++) {
-			if ((str[i] < 'а' || str[i] > 'я') && (str[i] < 'А' || str[i] > 'Я') && (str[i] != 'ё' && str[i] != 'Ё') && (str[i] < '0' || str[i] > '9')) {
+			if (!(is_alpha(str[i])) && (str[i] < '0' || str[i] > '9')) {
 				if (str[i] == ' ') {
 					if (str[i + 1] == ' ') {
 						cerr << endl << "Неверный ввод. Попробуйте снова.";
@@ -162,8 +201,14 @@ void input_patient(Stack*& newNode) {
 				cerr << endl << "Неверный ввод. Попробуйте снова.";
 				break;
 			}
-			if (str.size() - 1 == i)
+			if (str.size() - 1 == i) {
 				end = true;
+				str[0] = toupper(str[0]);
+				for (int i = 1; i < str.size(); i++) {
+					if (is_alpha(str[i]))
+						tolower(str[i]);
+				}
+			}
 		}
 	} while (!end);
 	strcpy(newNode->data.diagnosis, str.c_str());
@@ -230,7 +275,7 @@ void input_patient(Stack*& newNode) {
 string input_name(Stack*& top, bool isEditing) {	
 	if (top == nullptr) {
 		cerr << "Стек пуст!" << endl;
-		return;
+		return "";
 	}
 	string str;
 	bool end;
@@ -243,12 +288,12 @@ string input_name(Stack*& top, bool isEditing) {
 		cout << endl << "Введите Ф.И.О.: ";
 		rewind(stdin);
 		getline(cin, str);
-		if (str.size() >= 30) {
+		if (str.size() >= 40) {
 			cerr << endl << "Слишком длинная строка. Попробуйте снова.";
 			continue;
 		}
 		for (int i = 0; i < str.size(); i++) {
-			if ((str[i] < 'а' || str[i] > 'я') && (str[i] < 'А' || str[i] > 'Я') && (str[i] != 'ё' && str[i] != 'Ё')) {
+			if (!(is_alpha(str[i]))) {
 				if ((str[i] != '.') && (str[i] != ' ')) {
 					cerr << endl << "Неверный ввод. Попробуйте снова.";
 					break;
@@ -260,18 +305,34 @@ string input_name(Stack*& top, bool isEditing) {
 					}
 					count++;
 				}
+				if (str[i] == ' ') {
+					if (str[i + 1] == ' ') {
+						cerr << endl << "Неверный ввод. Попробуйте снова.";
+						break;
+					}
+				}
 			}
 			if (count > 2) {
 				cerr << endl << "Неверный ввод. Попробуйте снова.";
 				break;
 			}
-			if (str.size() - 1 == i)
+			if (str.size() - 1 == i) {
 				end = true;
+				str[0] = toupper(str[0]);
+				if (count != 0) {
+					str[str.find('.') - 1] = toupper(str[str.find('.') - 1]);
+					str[str.rfind('.') - 1] = toupper(str[str.rfind('.') - 1]);
+				}
+				else {
+					str[str.find(' ') + 1] = toupper(str[str.find(' ') + 1]);
+					str[str.find(' ', str.find(' ') + 1) + 1] = toupper(str[str.find(' ', str.find(' ') + 1) + 1]);
+				}
+			}
 		}
 	} while (!end);
 	if (isEditing) {
 		strcpy(top->data.name, str.c_str());
-		return 0;
+		return "";
 	}
 	else
 		return str;
@@ -280,7 +341,7 @@ string input_name(Stack*& top, bool isEditing) {
 string input_birthdate(Stack*& top, bool isEditing) {
 	if (top == nullptr) {
 		cerr << "Стек пуст!" << endl;
-		return;
+		return "";
 	}
 	string str;
 	bool end;
@@ -329,17 +390,17 @@ string input_birthdate(Stack*& top, bool isEditing) {
 	}
 	if (isEditing) {
 		strcpy(top->data.birthDate, str.c_str());
-		return 0;
+		return "";
 	}
 	else {
 		return str;
 	}
 }
 
-string input_medcardNumber(Stack*& top, bool isEditing) {
+int input_medcardNumber(Stack*& top, bool isEditing) {
 	if (top == nullptr) {
 		cerr << "Стек пуст!" << endl;
-		return;
+		return 0;
 	}
 	string str;
 	bool end;
@@ -358,14 +419,14 @@ string input_medcardNumber(Stack*& top, bool isEditing) {
 		return 0;
 	}
 	else {
-		return str;
+		return number;
 	}
 }
 
 string input_diagnosis(Stack*& top, bool isEditing) {
 	if (top == nullptr) {
 		cerr << "Стек пуст!" << endl;
-		return;
+		return "";
 	}
 	string str;
 	bool end;
@@ -379,29 +440,36 @@ string input_diagnosis(Stack*& top, bool isEditing) {
 		cout << endl << "Введите диагноз: ";
 		rewind(stdin);
 		getline(cin, str);
-		if (str.size() >= 30) {
+		if (str.size() >= 20) {
 			cerr << endl << "Слишком длинная строка. Попробуйте снова.";
 			continue;
 		}
 		for (int i = 0; i < str.size(); i++) {
-			if ((str[i] < 'а' || str[i] > 'я') && (str[i] < 'А' || str[i] > 'Я') && (str[i] != 'ё' && str[i] != 'Ё') && (str[i] < '0' || str[i] > '9')) {
+			if (!(is_alpha(str[i])) && (str[i] < '0' || str[i] > '9')) {
 				if (str[i] == ' ') {
 					if (str[i + 1] == ' ') {
 						cerr << endl << "Неверный ввод. Попробуйте снова.";
 						break;
 					}
+					count++;
 					continue;
 				}
 				cerr << endl << "Неверный ввод. Попробуйте снова.";
 				break;
 			}
-			if (str.size() - 1 == i)
+			if (str.size() - 1 == i) {
 				end = true;
+				str[0] = toupper(str[0]);				
+				for(int i = 1; i<str.size(); i++)	{					
+					if (is_alpha(str[i]))
+						tolower(str[i]);
+				}
+			}
 		}
 	} while (!end);
 	if (isEditing){
 		strcpy(top->data.diagnosis, str.c_str());
-		return 0;
+		return "";
 	}
 	else {
 		return str;
@@ -411,12 +479,12 @@ string input_diagnosis(Stack*& top, bool isEditing) {
 string input_lastVisitDate(Stack*& top, bool isEditing) {
 	if (top == nullptr) {
 		cerr << "Стек пуст!" << endl;
-		return;
+		return "";
 	}
 	string str;
 	bool end;
 	int count;
-	int day, month, year, dayVisit, monthVisit, yearVisit;
+	int day, month, year;
 	if (isEditing)
 		strcpy(top->data.lastVisitDate, "");
 	while (true) {
@@ -450,35 +518,17 @@ string input_lastVisitDate(Stack*& top, bool isEditing) {
 					end = true;
 			}
 		} while (!end);
-		dayVisit = stoi(str.substr(0, 2));
-		monthVisit = stoi(str.substr(3, 2));
-		yearVisit = stoi(str.substr(6, 4));
-		if (isValidDate(dayVisit, monthVisit, yearVisit)) {
-			if (yearVisit < year) {
-				cerr << endl << "Дата визита не может быть раньше даты рождения.";
-			}
-			else if (yearVisit == year) {
-				if (monthVisit < month) {
-					cerr << endl << "Дата визита не может быть раньше даты рождения.";
-				}
-				else if (monthVisit == month && dayVisit < day) {
-					cerr << endl << "Дата визита не может быть раньше даты рождения.";
-				}
-				else {
-					break;
-				}
-			}
-			else {
-				break;
-			}
-		}
+		day = stoi(str.substr(0, 2));
+		month = stoi(str.substr(3, 2));
+		year = stoi(str.substr(6, 4));
+		if (isValidDate(day, month, year)) break;
 		else {
 			cerr << endl << "Введена несуществующая дата.";
-		}
+		}		
 	}
 	if (isEditing){
 		strcpy(top->data.lastVisitDate, str.c_str());
-		return 0;
+		return "";
 	}
 	else {
 		return str;
@@ -537,13 +587,13 @@ void input_direction(int& direction) {
 
 void input_search(int& fieldChoice) {	
 	string str;
-	do {
-		cout << endl << "Выберите поле для поиска:";
+	do {		
 		cout << endl << "1.Имя";
 		cout << endl << "2.Дата рождения";
 		cout << endl << "3.Номер медкарты";
 		cout << endl << "4.Диагноз";
-		cout << endl << "5.Дата последнего визита";		
+		cout << endl << "5.Дата последнего визита" << endl;
+		cout << endl << "Выберите поле для поиска: ";		
 		fieldChoice = 0;				
 		cin >> str;
 		cin.ignore();
@@ -552,18 +602,4 @@ void input_search(int& fieldChoice) {
 		}
 		else cerr << endl << "Некорректный ввод.";
 	} while (!check(str) || fieldChoice < 1 || fieldChoice > 5);	
-}
-
-void input_searchInt(int& searchInt) {
-	string str;
-	do {
-		cout << endl << "Выберите номер мед.карты для поиска:";		
-		searchInt = 0;
-		cin >> str;
-		cin.ignore();
-		if (check(str)) {
-			searchInt = stoi(str);
-		}
-		else cerr << endl << "Некорректный ввод.";
-	} while (!check(str) || searchInt < 0);
 }

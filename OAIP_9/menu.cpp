@@ -61,13 +61,14 @@ void showMenu(Stack*& top) {
 				sort_diagnosis(top, direction);
 			} break;
 			case 10: {
+				printHead();
 				searchPatients(top);
 			}		
-			case 11: 
+			case 12: 
 				break;
 			}
 		}
 		else error_choice();
-	} while (!checkMenu(str) || m != 11);
+	} while (!checkMenu(str) || m != 12);
 	clear(top);	
 }
