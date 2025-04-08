@@ -63,7 +63,11 @@ void showMenu(Stack*& top) {
 			case 10: {
 				printHead();
 				searchPatients(top);
-			}		
+			} break;
+			case 11: {
+				int numberForSearch = input_medcardNumber(top, 0);
+				binarySearchByCardNumber(top, numberForSearch);
+			} break;
 			case 12: 
 				break;
 			}

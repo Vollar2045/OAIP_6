@@ -234,17 +234,18 @@ void searchPatients(Stack*& top) {
     Stack* buffer = nullptr;
     Stack* reverseBuffer = nullptr;
     printHead();
+    cout << endl << endl;
     if (direction == 1) {
         while (top) {
             Patient p = pop(top);
             bool match = false;
             switch (fieldChoice) {
             case 1: {
-                match = string(p.name).find(searchStr) != string::npos;
+                match = string(p.name).rfind(searchStr, 0) == 0;
                 break;
             }
             case 2: {
-                match = string(p.birthDate).find(searchStr) != string::npos;
+                match = string(p.birthDate).rfind(searchStr, 0) == 0;
                 break;
             }
             case 3: {
@@ -252,11 +253,11 @@ void searchPatients(Stack*& top) {
                 break;
             }
             case 4: {
-                match = string(p.diagnosis).find(searchStr) != string::npos;
+                match = string(p.diagnosis).rfind(searchStr, 0) == 0;
                 break;
             }
             case 5: {
-                match = string(p.lastVisitDate).find(searchStr) != string::npos;
+                match = string(p.lastVisitDate).rfind(searchStr, 0) == 0;
                 break;
             }
             }
@@ -277,11 +278,11 @@ void searchPatients(Stack*& top) {
             bool match = false;
             switch (fieldChoice) {
             case 1: {
-                match = string(p.name).find(searchStr) != string::npos;
+                match = string(p.name).rfind(searchStr, 0) == 0;
                 break;
             }
             case 2: {
-                match = string(p.birthDate).find(searchStr) != string::npos;
+                match = string(p.birthDate).rfind(searchStr, 0) == 0;
                 break;
             }
             case 3: {
@@ -289,11 +290,11 @@ void searchPatients(Stack*& top) {
                 break;
             }
             case 4: {
-                match = string(p.diagnosis).find(searchStr) != string::npos;
+                match = string(p.diagnosis).rfind(searchStr, 0) == 0;
                 break;
             }
             case 5: {
-                match = string(p.lastVisitDate).find(searchStr) != string::npos;
+                match = string(p.lastVisitDate).rfind(searchStr, 0) == 0;
                 break;
             }
             }
@@ -303,4 +304,105 @@ void searchPatients(Stack*& top) {
             push(top, p);
         }
     }    
+}
+
+void insertSorted(Stack*& sorted, Patient p) {
+    Stack* tempStack = nullptr;  
+    while (sorted && sorted->data.medicalCardNumber < p.medicalCardNumber) {
+        push(tempStack, pop(sorted));
+    }
+    push(sorted, p);    
+    while (tempStack) {
+        push(sorted, pop(tempStack));
+    }
+}
+
+void sortStackByCardNumber(Stack*& top, Stack*& sorted) {
+    Stack* temp = nullptr;    
+    while (top) {
+        Patient p = pop(top);
+        push(temp, p);
+        insertSorted(sorted, p);
+    } 
+    while (temp) {
+        push(top, pop(temp));
+    }
+}
+
+int getStackSize(Stack* top) {
+    int size = 0;
+    while (top) {
+        size++;
+        top = top->next;
+    }
+    return size;
+}
+
+Patient getElementAt(Stack*& top, int index) {
+    Stack* tempStack = nullptr;
+    Patient result;
+    int i = 0;
+    while (top && i <= index) {
+        Patient p = pop(top);
+        if (i == index) {
+            result = p;
+        }
+        push(tempStack, p);
+        i++;
+    }  
+    while (tempStack) {
+        push(top, pop(tempStack));
+    }
+    return result;
+}
+
+void binarySearchByCardNumber(Stack*& top, int searchNumber) {
+    if (top == nullptr) {
+        cout << "Стек пуст." << endl;
+        return;
+    }   
+    Stack* sorted = nullptr;
+    sortStackByCardNumber(top, sorted);
+    int left = 0;
+    int right = getStackSize(sorted) - 1;
+    bool found = false;
+    while (left <= right) {
+        int mid = left + (right - left) / 2; 
+        Patient midPatient = getElementAt(sorted, mid);
+        if (midPatient.medicalCardNumber == searchNumber) {
+            cout << "Пациенты с номером карты " << searchNumber << " найдены:" << endl;
+            printHead();
+            found = true;         
+            int firstIndex = mid;
+            while (firstIndex > 0) {
+                Patient leftPatient = getElementAt(sorted, firstIndex - 1);
+                if (leftPatient.medicalCardNumber == searchNumber) {
+                    firstIndex--;
+                }
+                else {
+                    break;
+                }
+            }           
+            while (firstIndex <= right) {
+                Patient current = getElementAt(sorted, firstIndex);
+                if (current.medicalCardNumber == searchNumber) {
+                    printPatient(current);
+                    firstIndex++;
+                }
+                else {
+                    break;
+                }
+            }
+            break;
+        }
+        else if (midPatient.medicalCardNumber < searchNumber) {
+            left = mid + 1;
+        }
+        else {
+            right = mid - 1;
+        }
+    }
+    if (!found) {
+        cout << "Пациент с номером карты " << searchNumber << " не найден." << endl;
+    }
 }

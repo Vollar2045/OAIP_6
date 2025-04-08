@@ -12,5 +12,10 @@ bool diagnosisCompare(const char* a, const char* b, int choice);
 int getOrder(char c);
 void sort_diagnosis(Stack*& top, int choice);
 void searchPatients(Stack*& top);
+int getStackSize(Stack* top);
+void insertSorted(Stack*& sorted, Patient p);
+void sortStackByCardNumber(Stack*& originalTop, Stack*& sorted);
+Patient getElementAt(Stack*& source, int index);
+void binarySearchByCardNumber(Stack*& originalTop, int searchNumber);
 
 #endif

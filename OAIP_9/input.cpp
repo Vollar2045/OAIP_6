@@ -116,6 +116,9 @@ void input_patient(Stack*& newNode) {
 			if (str.size() - 1 == i) {
 				end = true;		
 				str[0] = toupper(str[0]);
+				for (int i = 1; i < str.size(); i++) {
+					str[i] = tolower(str[i]);
+				}
 				if (count != 0) {
 					str[str.find('.') - 1] = toupper(str[str.find('.') - 1]);
 					str[str.rfind('.') - 1] = toupper(str[str.rfind('.') - 1]);
@@ -206,7 +209,7 @@ void input_patient(Stack*& newNode) {
 				str[0] = toupper(str[0]);
 				for (int i = 1; i < str.size(); i++) {
 					if (is_alpha(str[i]))
-						tolower(str[i]);
+						str[i] = tolower(str[i]);
 				}
 			}
 		}
@@ -319,6 +322,9 @@ string input_name(Stack*& top, bool isEditing) {
 			if (str.size() - 1 == i) {
 				end = true;
 				str[0] = toupper(str[0]);
+				for (int i = 1; i < str.size(); i++) {
+					str[i] = tolower(str[i]);
+				}
 				if (count != 0) {
 					str[str.find('.') - 1] = toupper(str[str.find('.') - 1]);
 					str[str.rfind('.') - 1] = toupper(str[str.rfind('.') - 1]);
@@ -462,7 +468,7 @@ string input_diagnosis(Stack*& top, bool isEditing) {
 				str[0] = toupper(str[0]);				
 				for(int i = 1; i<str.size(); i++)	{					
 					if (is_alpha(str[i]))
-						tolower(str[i]);
+						str[i] = tolower(str[i]);
 				}
 			}
 		}
@@ -537,6 +543,10 @@ string input_lastVisitDate(Stack*& top, bool isEditing) {
 
 void input_filename(string& filename, int m) {	
 	switch (m) {
+	case 3: {
+		output_menu(m);
+		cin >> filename;
+	} break;
 	case 4: {
 		output_menu(m);
 		cin >> filename;
@@ -546,10 +556,6 @@ void input_filename(string& filename, int m) {
 		cin >> filename;
 	} break;
 	case 6: {
-		output_menu(m);
-		cin >> filename;
-	} break;
-	case 7: {
 		output_menu(m);
 		cin >> filename;
 	} break;
