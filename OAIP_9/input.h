@@ -10,9 +10,15 @@ bool check(string str);
 bool isLeapYear(int year);
 bool isValidDate(int day, int month, int year);
 void input_patient(Stack*& newNode);
+string input_name(Stack*& top, bool isEditing);
+string input_birthdate(Stack*& top, bool isEditing);
+string input_medcardNumber(Stack*& top, bool isEditing);
+string input_diagnosis(Stack*& top, bool isEditing);
+string input_lastVisitDate(Stack*& top, bool isEditing);
 void input_filename(string& filename, int m);
-void input_str(string& str);
-void input_toDelete(string& str, int& pos);
-void input_choice(string& str, int& choice);
+void input_toDelete(int& pos);
+void input_direction(int& direction);
+void input_search(int& fieldChoice);
+void input_searchInt(int& searchInt);
 
 #endif

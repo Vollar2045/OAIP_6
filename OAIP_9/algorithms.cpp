@@ -4,6 +4,7 @@
 #include "stack.h"
 #include "output.h"
 #include "file.h"
+#include <iostream>
 #include <string>
 #include <locale>
 using namespace std;
@@ -199,5 +200,101 @@ void shellSort_medCard1(Stack*& top, bool ubivanie) {
         temp = temp->next;
         node->next = top;
         top = node;
+    }
+}
+
+void searchPatients(Stack*& top) {
+    if (top == nullptr) {
+        cerr << endl <<"Стек пуст." << endl;
+        return;
+    }
+    int fieldChoice;
+    input_search(fieldChoice);
+    string searchStr;
+    int searchInt = 0;
+    switch (fieldChoice) {
+    case 1: {
+        searchStr = input_name(top, 0);
+    } break;
+    case 2: {
+        searchStr = input_birthdate(top, 0);
+    } break;
+    case 3: {
+        input_searchInt(searchInt);
+    } break;
+    case 4: {
+        searchStr = input_diagnosis(top, 0);
+    } break;
+    case 5: {
+        searchStr = input_lastVisitDate(top, 0);
+    } break;
+    }      
+    int direction;    
+    input_direction(direction);      
+    Stack* buffer = nullptr;       
+    Stack* reverseBuffer = nullptr;
+    while (top) {
+        Patient p = pop(top);
+        push(buffer, p);
+    }
+    if (direction == 1) {
+        // Сверху вниз — ищем сразу в buffer
+        Stack* temp = buffer;
+        while (temp) {
+            bool match = false;
+            switch (fieldChoice) {
+            case 1: {
+                match = string(temp->data.name) == searchStr;
+                break;
+            }
+            case 2: {
+                match = string(temp->data.birthDate) == searchStr;
+                break;
+            }
+            case 3: {
+                match = temp->data.medicalCardNumber == searchInt;
+                break;
+            }
+            case 4: {
+                match = string(temp->data.diagnosis) == searchStr;
+                break;
+            }
+            case 5: {
+                match = string(temp->data.lastVisitDate) == searchStr;
+                break;
+            }
+            }
+            if (match) 
+                printPatient(temp);
+            temp = temp->next;
+        }
+    }
+    else {
+        // Снизу вверх — перекладываем buffer в reverseBuffer и ищем там
+        while (buffer) {
+            Patient p = pop(buffer);
+            push(reverseBuffer, p);
+        }
+        Stack* temp = reverseBuffer;
+        while (temp) {
+            bool match = false;
+            switch (fieldChoice) {
+            case 1: match = string(temp->data.name) == searchStr; break;
+            case 2: match = string(temp->data.birthDate) == searchStr; break;
+            case 3: match = temp->data.medicalCardNumber == searchInt; break;
+            case 4: match = string(temp->data.diagnosis) == searchStr; break;
+            case 5: match = string(temp->data.lastVisitDate) == searchStr; break;
+            }
+            if (match) printPatient(temp->data);
+            temp = temp->next;
+        }
+    }
+
+    // Восстанавливаем стек
+    while (reverseBuffer) {
+        push(originalTop, pop(reverseBuffer));
+    }
+    while (buffer) {
+        push(originalTop, pop(buffer));
     }
 }

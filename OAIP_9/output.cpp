@@ -8,23 +8,19 @@ using namespace std;
 
 void printPatient(Stack* top) {   
     if (!top) {
-        cout << "Нет информации о пациентах.\n";
+        cerr << "Нет информации о пациентах." << endl;
         return;
-    }
-    Stack* current = top;
-    while (current) {
-        cout << "Ф.И.О.: " << current->data.name << "\n";
-        cout << "Дата рождения: " << current->data.birthDate << "\n";
-        cout << "Номер медкарты: " << current->data.medicalCardNumber << "\n";
-        cout << "Диагноз: " << current->data.diagnosis << "\n";
-        cout << "Дата последнего приема: " << current->data.lastVisitDate << "\n\n";
-        current = current->next;
-    }
+    }    
+    cout << "Ф.И.О.: " << top->data.name << endl;
+    cout << "Дата рождения: " << top->data.birthDate << endl;
+    cout << "Номер медкарты: " << top->data.medicalCardNumber << endl;
+    cout << "Диагноз: " << top->data.diagnosis << endl;
+    cout << "Дата последнего приема: " << top->data.lastVisitDate << endl << endl;
 }
 
 void printTab(Stack* top) {
     if (!top) {
-        cout << "Нет информации о пациентах.\n";
+        cout << "Нет информации о пациентах." << endl;
         return;
     }
     cout << left << setw(30) << "Ф.И.О."
@@ -33,7 +29,6 @@ void printTab(Stack* top) {
         << setw(30) << "Диагноз"
         << setw(15) << "Дата последнего приема" << endl;
     cout << string(115, '-') << endl;
-
     Stack* current = top;
     while (current) {
         cout << left << setw(30) << current->data.name
@@ -71,7 +66,8 @@ void output_menu(int m) {
         cout << endl << "8)Удалить запись о пациенте по его номеру";
         cout << endl << "9)Сортировка Шелла по полю имени";
         cout << endl << "10)Сортировка вставками по полю диагноза";
-        cout << endl << "11)Выйти из программы" << endl;
+        cout << endl << "11)Поиск по выбранному полю";
+        cout << endl << "12)Выйти из программы" << endl;
     } break;
     }
 }
@@ -113,5 +109,5 @@ void success_save(string filename){
 }
 
 void error_choice() {
-    cout << endl << "Выберите вариант от 1 до 8.";
+    cout << endl << "Выберите вариант от 1 до 12.";
 }
