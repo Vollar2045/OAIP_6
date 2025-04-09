@@ -60,8 +60,7 @@ void showMenu(Stack*& top) {
 				input_direction(direction);
 				sort_diagnosis(top, direction);
 			} break;
-			case 10: {
-				printHead();
+			case 10: {				
 				searchPatients(top);
 			} break;
 			case 11: {

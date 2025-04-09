@@ -233,8 +233,8 @@ void searchPatients(Stack*& top) {
     input_direction(direction);
     Stack* buffer = nullptr;
     Stack* reverseBuffer = nullptr;
-    printHead();
     cout << endl << endl;
+    printHead();    
     if (direction == 1) {
         while (top) {
             Patient p = pop(top);
