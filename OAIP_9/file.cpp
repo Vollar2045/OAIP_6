@@ -35,6 +35,28 @@ void save_DB(const string& filename, Stack* top) {
 	success_save(filename);
 }
 
+void save_DB_txt(const string& filename, Stack* top) {	
+	ofstream file(filename);
+	if (!file) {
+		cerr << "Ошибка при открытии файла!" << endl;
+		return;
+	}
+	file << "Имя | Дата рождения | Номер карты | Диагноз | Дата последнего визита" << endl;
+	file << "------------------------------------------------------------" << endl;
+	Stack* current = top;
+	while (current) {
+		file << current->data.name << " | "
+			<< current->data.birthDate << " | "
+			<< current->data.medicalCardNumber << " | "
+			<< current->data.diagnosis << " | "
+			<< current->data.lastVisitDate << endl;
+		current = current->next;
+	}
+
+	file.close(); 
+	cout << "Данные успешно сохранены в файл " << filename << endl;
+}
+
 void load_DB(const string& filename, Stack*& top) {
 	ifstream file(filename, ios::binary | ios::in);
 	if (!file) {

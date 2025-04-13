@@ -45,9 +45,17 @@ void showMenu(Stack*& top) {
 			case 7: {
 				int pos;
 				input_toDelete(pos);
-				deletePatient(top, pos);				
+				editPatient(top, pos);
 			} break;
 			case 8: {
+				int pos;
+				input_toDelete(pos);
+				deletePatient(top, pos);				
+			} break;
+			case 9: {
+				sort(top);
+			} break;
+			case 10: {
 				input_direction(direction);
 				if (direction == 1) {
 					shellSort_medCard(top, true);
@@ -56,22 +64,28 @@ void showMenu(Stack*& top) {
 					shellSort_medCard(top, false);
 				}
 			} break;
-			case 9: {				
+			case 11: {				
 				input_direction(direction);
 				sort_diagnosis(top, direction);
 			} break;
-			case 10: {				
-				searchPatients(top);
+			case 12: {				
+				filterPatients(top);
 			} break;
-			case 11: {
+			case 13: {
+				searchPatient(top);
+			} break;
+			case 14: {
 				int numberForSearch = input_medcardNumber(top, 0);
 				binarySearchByCardNumber(top, numberForSearch);
 			} break;
-			case 12: 
+			case 15:{
+				extra_task(top);
+			} break;
+			case 16: 
 				break;
 			}
 		}
 		else error_choice();
-	} while (!checkMenu(str) || m != 12);
+	} while (!checkMenu(str) || m != 16);
 	clear(top);	
 }

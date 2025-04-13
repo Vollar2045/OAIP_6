@@ -599,7 +599,7 @@ void input_search(int& fieldChoice) {
 		cout << endl << "3.Номер медкарты";
 		cout << endl << "4.Диагноз";
 		cout << endl << "5.Дата последнего визита" << endl;
-		cout << endl << "Выберите поле для поиска: ";		
+		cout << endl << "Выберите поле для поиска/фильтрации: ";		
 		fieldChoice = 0;				
 		cin >> str;
 		cin.ignore();

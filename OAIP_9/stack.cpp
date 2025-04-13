@@ -63,6 +63,82 @@ Patient pop(Stack*& top) {
 	return poppedPatient;
 }
 
+void editPatient(Stack*& top, int pos) {
+	if (top == nullptr) {
+		cerr << endl << "Стек пуст. Редактирование невозможно.";
+		return;
+	}
+	Stack* tempStack = nullptr;
+	int currentPos = 1;
+	while (top != nullptr && currentPos < pos) {
+		Stack* temp = top;
+		top = top->next;
+		temp->next = tempStack;
+		tempStack = temp;
+		currentPos++;
+	}
+	if (top == nullptr) {
+		cerr << endl << "Запись пациента с таким номером отсутствует.";
+		while (tempStack) {
+			Stack* temp = tempStack;
+			tempStack = tempStack->next;
+			temp->next = top;
+			top = temp;
+		}
+		return;
+	}	
+	string str;
+	int choice = 0;
+	do {		
+		cout << endl << "0. Завершить редактирование";
+		cout << endl << "1. Имя";
+		cout << endl << "2. Дата рождения";
+		cout << endl << "3. Номер медкарты";
+		cout << endl << "4. Диагноз";
+		cout << endl << "5. Дата последнего визита";		
+		cout << endl << "Выберите поле для редактирования: ";
+		cin >> str;
+		if (check(str)) {
+			choice = stoi(str);
+		}
+	} while (!check);
+	cin.ignore();
+	switch (choice) {
+	case 1:
+		cout << endl << "Ввод нового имени.";
+		input_name(top, 1);
+		break;
+	case 2:
+		cout << endl << "Ввод новой даты рождения.";
+		input_birthdate(top, 1);
+		break;
+	case 3:
+		cout << endl << "Ввод нового номера медкарты.";
+		input_medcardNumber(top, 1);
+		cin.ignore();
+		break;
+	case 4:
+		cout << endl << "Ввод нового диагноза.";
+		input_diagnosis(top, 1);
+		break;
+	case 5:
+		cout << endl << "Ввод новой даты последнего визита.";
+		input_lastVisitDate(top, 1);
+		break;
+	case 0:
+		cout << endl << "Редактирование завершено.";
+		break;
+	default:
+		cout << endl << "Неверный выбор. Повторите попытку.";
+	}	
+	while (tempStack) {
+		Stack* temp = tempStack;
+		tempStack = tempStack->next;
+		temp->next = top;
+		top = temp;
+	}
+}
+
 void push(Stack*& top, const Patient& patient) {
 	Stack* newNode = (Stack*)malloc(sizeof(Stack));	
 	newNode->data = patient;
