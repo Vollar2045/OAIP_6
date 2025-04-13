@@ -20,7 +20,6 @@ struct Stack {
 void addPatient(Stack*& top);
 Patient pop(Stack*& top);
 void push(Stack*& top, const Patient& patient);
-Patient peek(Stack* top);
 void deletePatient(Stack*& top, int pos);
 void clear(Stack*& top);
 void editPatient(Stack*& top, int pos);

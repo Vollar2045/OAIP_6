@@ -146,15 +146,6 @@ void push(Stack*& top, const Patient& patient) {
 	top = newNode;
 }
 
-Patient peek(Stack* top) {
-	if (top == nullptr) {
-		cerr << endl << "Стек пуст. Невозможно получить значение." << endl;
-		Patient emptyPatient = { "", "", 0, "", "" };
-		return emptyPatient;
-	}
-	return top->data;
-}
-
 void clear(Stack*& top) {
 	while (top) {
 		Stack* temp = top;
